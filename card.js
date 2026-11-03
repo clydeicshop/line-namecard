@@ -1,7 +1,7 @@
 // 名片資料與設定：要改內容只改這個檔
 const CARD = {
   // 在 LINE Developers 建好 LIFF 後，把 LIFF ID 貼在這裡
-  liffId: "2012346794-zFc1Y2hM",
+  liffId: "2012349534-gyf5iDBV",
   nameZh: "卓家棋",
   nameEn: "Clyde",
   title: "業務",
