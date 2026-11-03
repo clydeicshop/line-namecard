@@ -5,7 +5,7 @@ const CARD = {
   nameZh: "卓家棋",
   nameEn: "Clyde",
   title: "業務",
-  company: "淩琦科技",
+  company: "淩耀電子",
   phone: "0972-708-859",
   phoneIntl: "+886972708859",
   email: "clyde@icshop.com.tw",
