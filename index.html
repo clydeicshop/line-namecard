@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>卓家棋 Clyde｜淩琦科技</title>
+<meta property="og:title" content="卓家棋 Clyde｜淩琦科技 業務">
+<meta property="og:description" content="電話 0972-708-859｜clyde@icshop.com.tw">
+<meta property="og:image" content="https://clydeicshop.github.io/line-namecard/logo.png">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 24px 16px 40px; background: #eef1f4; font-family: -apple-system, "PingFang TC", "Noto Sans TC", sans-serif; color: #111; }
+  .card { max-width: 340px; margin: 0 auto; background: #fff; border-radius: 16px; overflow: hidden; border: 1px solid #dde1e5; }
+  .bar { height: 6px; background: #E90316; }
+  .logo { display: block; width: 100%; padding: 8px 32px 0; }
+  .info { padding: 4px 22px 16px; }
+  .name { font-size: 24px; font-weight: 600; }
+  .name small { font-size: 16px; font-weight: 400; color: #666; margin-left: 6px; }
+  .role { font-size: 14px; color: #666; margin-top: 2px; }
+  hr { border: 0; border-top: 1px solid #e5e5e5; margin: 14px 0 10px; }
+  .row { font-size: 14px; color: #333; padding: 4px 0; }
+  .row b { color: #E90316; font-weight: 400; margin-right: 8px; }
+  .btns { padding: 0 16px 18px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .btns a, .btns button { display: block; text-align: center; padding: 11px 0; border-radius: 8px; font-size: 14px; text-decoration: none; color: #333; border: 1px solid #ccc; background: #fff; font-family: inherit; cursor: pointer; }
+  .btns .wide { grid-column: 1 / -1; }
+  .btns .line { background: #06C755; border-color: #06C755; color: #fff; font-weight: 600; }
+  .btns .share { background: #E90316; border-color: #E90316; color: #fff; font-weight: 600; }
+  #msg { max-width: 340px; margin: 12px auto 0; text-align: center; font-size: 13px; color: #666; min-height: 1em; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="bar"></div>
+  <img class="logo" src="logo.png" alt="iC Shopping">
+  <div class="info">
+    <div class="name">卓家棋<small>Clyde</small></div>
+    <div class="role">業務｜淩琦科技</div>
+    <hr>
+    <div class="row"><b>電話</b>0972-708-859</div>
+    <div class="row"><b>Email</b>clyde@icshop.com.tw</div>
+  </div>
+  <div class="btns">
+    <a class="wide line" href="https://line.me/ti/p/FuiakHc92c">加我 LINE</a>
+    <a href="tel:+886972708859">撥打電話</a>
+    <a href="mailto:clyde@icshop.com.tw">寄送 Email</a>
+    <a class="wide" href="clyde.vcf">存入通訊錄</a>
+    <button class="wide share" id="share" type="button">把名片傳給 LINE 好友</button>
+  </div>
+</div>
+<div id="msg"></div>
+
+<script src="card.js"></script>
+<script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+<script>
+  const msg = document.getElementById("msg");
+  const shareBtn = document.getElementById("share");
+  let liffReady = false;
+
+  if (CARD.liffId && window.liff) {
+    liff.init({ liffId: CARD.liffId })
+      .then(() => { liffReady = true; })
+      .catch((e) => { msg.textContent = "LINE 連線失敗：" + e.message; });
+  }
+
+  // 沒有 LIFF（例如用一般瀏覽器開、或還沒設定 LIFF ID）時，退回用 LINE 分享網址傳連結
+  function shareAsLink() {
+    const text = `${CARD.nameZh} ${CARD.nameEn}｜${CARD.company} ${CARD.title}\n${liffUrl()}`;
+    location.href = "https://line.me/R/share?text=" + encodeURIComponent(text);
+  }
+
+  shareBtn.addEventListener("click", async () => {
+    if (liffReady && !liff.isLoggedIn()) {
+      liff.login({ redirectUri: location.href });
+      return;
+    }
+    if (!liffReady || !liff.isApiAvailable("shareTargetPicker")) {
+      shareAsLink();
+      return;
+    }
+    try {
+      const res = await liff.shareTargetPicker([flexMessage()], { isMultiple: true });
+      msg.textContent = res ? "名片已傳送" : "";
+    } catch (e) {
+      msg.textContent = "傳送失敗：" + e.message;
+    }
+  });
+</script>
+</body>
+</html>
